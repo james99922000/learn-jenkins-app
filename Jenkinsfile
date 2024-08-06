@@ -3,9 +3,12 @@ pipeline {
 
     stages {
         stage('Build') {
+            steps{
+                cleanWs()
+            }
+            
             agent {
                 docker {
-                    cleanWs()
                     image 'node:18-alpine'
                     reuseNode true
                 }
