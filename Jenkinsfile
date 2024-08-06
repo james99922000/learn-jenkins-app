@@ -11,7 +11,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    git rm -rf --cached node_modules
+                    rm -rf node_modules
                     ls -la
                     node --version
                     npm --version
