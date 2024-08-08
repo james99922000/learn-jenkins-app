@@ -5,6 +5,7 @@ pipeline {
        NETLIFY_SITE_ID = 'f16730c9-512c-4d14-a8d4-2225288b6d99'
        NETLIFY_AUTH_TOKEN = credentials('Netlify-token')
 
+
     }
 
     stages {
@@ -59,6 +60,12 @@ pipeline {
                             reuseNode true
                         }
                     }
+                    environment{
+                        CI_ENVIRONMENT_URL = 'https://soft-sfogliatella-d52fa4.netlify.app'
+
+                }
+
+
                     steps{
                         sh '''
                             npm install serve
@@ -69,7 +76,7 @@ pipeline {
                     }
                     post {
                         always {
-                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright Local Report', reportTitles: '', useWrapperFileDirectly: true])
                         }
                     }
                 }
@@ -91,6 +98,25 @@ pipeline {
                     node_modules/.bin/netlify status
                     node_modules/.bin/netlify deploy --dir=build --prod
                 '''
+            }
+        }
+
+        stage('Prod E2E') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    reuseNode true
+                }
+            }
+            steps{
+                sh '''
+                    npx playwright test --reporter=html
+                '''
+            }
+            post {
+                always {
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright E2E', reportTitles: '', useWrapperFileDirectly: true])
+                }
             }
         }
 
