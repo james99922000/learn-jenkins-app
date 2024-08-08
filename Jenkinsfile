@@ -60,11 +60,6 @@ pipeline {
                             reuseNode true
                         }
                     }
-                    environment{
-                        CI_ENVIRONMENT_URL = 'https://soft-sfogliatella-d52fa4.netlify.app'
-
-                }
-
 
                     steps{
                         sh '''
@@ -108,6 +103,11 @@ pipeline {
                     reuseNode true
                 }
             }
+
+            environment{
+                CI_ENVIRONMENT_URL = 'https://soft-sfogliatella-d52fa4.netlify.app'
+                }
+
             steps{
                 sh '''
                     npx playwright test --reporter=html
