@@ -22,7 +22,7 @@ pipeline {
         }
 
         stage('Stage Test'){
-            Parallel {
+            parallel {
                 stage('Unit Test') {
                     agent {
                         docker {
