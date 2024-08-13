@@ -24,7 +24,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'my_aws', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh '''
                         aws --version
-                        aws s3 ls
+                        echo "Hello S4!" index.html
+                        aws s3 cp index.html s3"//learn-jenkins-jam-9987452/index.html
                     '''
                 }
 
